@@ -128,3 +128,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # USERS
 AUTH_USER_MODEL = 'users.User'
+
+# REST FRAMEWORK JWT
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+
+}
