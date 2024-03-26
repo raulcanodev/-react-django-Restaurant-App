@@ -6,7 +6,7 @@ export const LoginAdmin = () => {
 	return (
 		<div className="login-admin">
 			<div className="login-admin__content">
-				<h1>Login to admin console</h1>
+				<h1>Admin console</h1>
 				<LoginForm />
 			</div>
 		</div>
