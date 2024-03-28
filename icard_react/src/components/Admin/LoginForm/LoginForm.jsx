@@ -33,7 +33,6 @@ export const LoginForm = () => {
 				error={formik.errors.password}
 				fluid
 			/>
-
 			<Button type="submit" content="Login" primary fluid />
 		</form>
 	);
