@@ -3,12 +3,19 @@ import { Button, Form } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./LoginForm.scss";
+import { loginApi } from "../../../api/user";
 
 export const LoginForm = () => {
 	const formik = useFormik({
 		initialValues: initialValues(),
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			try {
+				const response = await loginApi(values);
+				const { access } = response;
+				console.log(access);
+			} catch (error) {
+				console.log(error);
+			}
 		},
 		validationSchema: validationSchema(),
 	});
