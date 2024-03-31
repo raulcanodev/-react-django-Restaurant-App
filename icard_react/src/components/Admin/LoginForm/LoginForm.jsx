@@ -3,9 +3,13 @@ import { Button, Form } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./LoginForm.scss";
+import { toast } from "react-toastify";
 import { loginApi } from "../../../api/user";
+import { useAuth } from "../../../hooks";
 
 export const LoginForm = () => {
+	console.log(useAuth());
+
 	const formik = useFormik({
 		initialValues: initialValues(),
 		onSubmit: async (values) => {
@@ -15,6 +19,7 @@ export const LoginForm = () => {
 				console.log(access);
 			} catch (error) {
 				console.log(error);
+				toast.error(error.message);
 			}
 		},
 		validationSchema: validationSchema(),
