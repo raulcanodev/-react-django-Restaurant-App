@@ -8,7 +8,8 @@ import { loginApi } from "../../../api/user";
 import { useAuth } from "../../../hooks";
 
 export const LoginForm = () => {
-	console.log(useAuth());
+	const { login } = useAuth();
+	// console.log(useAuth());
 
 	const formik = useFormik({
 		initialValues: initialValues(),
@@ -16,7 +17,8 @@ export const LoginForm = () => {
 			try {
 				const response = await loginApi(values);
 				const { access } = response;
-				console.log(access);
+				login(access);
+				// console.log(access);
 			} catch (error) {
 				console.log(error);
 				toast.error(error.message);
