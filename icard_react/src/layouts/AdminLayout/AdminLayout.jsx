@@ -1,9 +1,10 @@
 import React from "react";
 import { LoginAdmin } from "../../pages/Admin";
+import { useAuth } from "../../hooks";
 import "./AdminLayout.scss";
 
 export function AdminLayout({ children }) {
-	const auth = null;
+	const { auth } = useAuth();
 
 	if (!auth) return <LoginAdmin />;
 
