@@ -1,5 +1,5 @@
-import React, { createContext, useState } from "react";
-import { setToken } from "../api/token";
+import React, { createContext, useState, useEffect } from "react";
+import { setToken, getToken } from "../api/token";
 import { useUser } from "../hooks";
 
 export const AuthContext = createContext({
@@ -9,8 +9,21 @@ export const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }) {
-	const { getME } = useUser();
 	const [auth, setAuth] = useState(undefined);
+	const { getME } = useUser();
+
+	useEffect(() => {
+		(async () => {
+			const token = getToken();
+			if (token) {
+				const me = await getME(token);
+				setAuth({ token, me });
+			} else {
+				setAuth(null);
+			}
+			// console.log(token);
+		})();
+	}, []);
 
 	const login = async (token) => {
 		setToken(token);
@@ -25,11 +38,11 @@ export function AuthProvider({ children }) {
 		logout: () => console.log("Realizando logout"),
 	};
 
+	if (auth === undefined) return null;
+
 	return (
 		<AuthContext.Provider value={valueContext}>
 			{children}
 		</AuthContext.Provider>
 	);
 }
-
-// 🔴 Minuto 10:15 de la clase

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Add the following to create this project as an API
     'corsheaders', # Add corsheaders to the installed apps
-    'drf_yasg', # Add drf_yasg to the installed apps
+    'drf_yasg', # API Doc
     'rest_framework', # Add rest_framework to the installed apps
     'users', # Add users to the installed apps
 ]
