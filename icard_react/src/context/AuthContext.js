@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { setToken, getToken } from "../api/token";
+import { setToken, getToken, removeToken } from "../api/token";
 import { useUser } from "../hooks";
 
 export const AuthContext = createContext({
@@ -32,10 +32,17 @@ export function AuthProvider({ children }) {
 		console.log(me);
 	};
 
+	const logout = () => {
+		if (auth) {
+			removeToken();
+			setAuth(null);
+		}
+	};
+
 	const valueContext = {
 		auth,
 		login,
-		logout: () => console.log("Realizando logout"),
+		logout,
 	};
 
 	if (auth === undefined) return null;
