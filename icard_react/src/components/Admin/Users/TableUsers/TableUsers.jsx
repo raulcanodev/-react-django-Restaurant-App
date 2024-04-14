@@ -1,5 +1,6 @@
 import { Table, Button, Icon } from "semantic-ui-react";
 import { map } from "lodash";
+import "./TableUsers.scss";
 
 export function TableUsers({ users }) {
 	return (
@@ -22,12 +23,37 @@ export function TableUsers({ users }) {
 						<Table.Cell>{user.email}</Table.Cell>
 						<Table.Cell>{user.first_name}</Table.Cell>
 						<Table.Cell>{user.last_name}</Table.Cell>
-						<Table.Cell>Active</Table.Cell>
-						<Table.Cell>Staff</Table.Cell>
-						<Table.Cell>Actions</Table.Cell>
+						<Table.Cell className="status">
+							{users.is_active ? (
+								<Icon name="check" />
+							) : (
+								<Icon name="close" />
+							)}
+						</Table.Cell>
+						<Table.Cell className="status">
+							{users.is_staff ? (
+								<Icon name="check" />
+							) : (
+								<Icon name="close" />
+							)}
+						</Table.Cell>
+						<Actions user={user} />
 					</Table.Row>
 				))}
 			</Table.Body>
 		</Table>
+	);
+}
+
+function Actions({ user }) {
+	return (
+		<Table.Cell textAlign="right">
+			<Button icon onClick={() => console.log(`Edit user ${user.email}`)}>
+				<Icon name="pencil" />
+			</Button>
+			<Button icon negative onClick={() => console.log("Delete")}>
+				<Icon name="close"></Icon>
+			</Button>
+		</Table.Cell>
 	);
 }
