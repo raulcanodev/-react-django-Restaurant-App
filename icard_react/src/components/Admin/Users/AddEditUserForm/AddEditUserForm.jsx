@@ -4,16 +4,20 @@ import { useFormik } from "formik";
 import { useUser } from "../../../../hooks";
 import * as Yup from "yup";
 
-export function AddEditUserForm() {
+export function AddEditUserForm({ onClose, onRefetch, user }) {
 	const { addUser } = useUser();
 	const formik = useFormik({
-		initialValues: initValues(),
-		validationSchema: Yup.object(newValidation()),
+		initialValues: initValues(user),
+		validationSchema: Yup.object(
+			user ? newUpdateValidation() : newValidation()
+		),
 		validateOnChange: false,
 		onSubmit: async (formValue) => {
 			try {
-				await addUser(formValue);
-				console.log("User created");
+				if (user) console.log("Update user");
+				else await addUser(formValue);
+				onRefetch();
+				onClose();
 			} catch (error) {
 				console.log(error);
 			}
@@ -46,6 +50,7 @@ export function AddEditUserForm() {
 				onChange={formik.handleChange}
 				error={formik.errors.last_name}></Form.Input>
 			<Form.Input
+				disabled={user ? true : false}
 				name="password"
 				placeholder="Password"
 				type="password"
@@ -73,19 +78,24 @@ export function AddEditUserForm() {
 				/>{" "}
 				User administrador
 			</div>
-			<Button type="submit" content="Create" primary fluid />
+			<Button
+				type="submit"
+				primary
+				fluid
+				content={user ? "Update" : "Create"}
+			/>
 		</Form>
 	);
 }
 
-function initValues() {
+function initValues(user) {
 	return {
-		username: "",
-		email: "",
-		first_name: "",
-		last_name: "",
-		is_active: true,
-		is_staff: false,
+		username: user?.username || "",
+		email: user?.email || "",
+		first_name: user?.first_name || "",
+		last_name: user?.last_name || "",
+		is_active: user?.is_active ? true : false,
+		is_staff: user?.is_staff ? true : false,
 		password: "",
 	};
 }
@@ -99,5 +109,17 @@ function newValidation() {
 		is_active: Yup.bool().required(true),
 		is_staff: Yup.bool().required(true),
 		password: Yup.string().required(true),
+	};
+}
+
+function newUpdateValidation() {
+	return {
+		username: Yup.string().required(true),
+		email: Yup.string().email(true).required(true),
+		first_name: Yup.string(),
+		last_name: Yup.string(),
+		is_active: Yup.bool().required(true),
+		is_staff: Yup.bool().required(true),
+		password: Yup.string(),
 	};
 }
