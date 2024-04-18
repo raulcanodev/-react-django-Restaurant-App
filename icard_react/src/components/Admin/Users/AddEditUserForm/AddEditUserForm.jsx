@@ -5,7 +5,8 @@ import { useUser } from "../../../../hooks";
 import * as Yup from "yup";
 
 export function AddEditUserForm({ onClose, onRefetch, user }) {
-	const { addUser } = useUser();
+	const { addUser, updateUser } = useUser();
+
 	const formik = useFormik({
 		initialValues: initValues(user),
 		validationSchema: Yup.object(
@@ -14,7 +15,7 @@ export function AddEditUserForm({ onClose, onRefetch, user }) {
 		validateOnChange: false,
 		onSubmit: async (formValue) => {
 			try {
-				if (user) console.log("Update user");
+				if (user) await updateUser(user.id, formValue);
 				else await addUser(formValue);
 				onRefetch();
 				onClose();
