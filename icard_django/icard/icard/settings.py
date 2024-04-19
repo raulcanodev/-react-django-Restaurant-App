@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # IMPORT PARA JWT
 import datetime
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg', # API Doc
     'rest_framework', # Add rest_framework to the installed apps
     'users', # Add users to the installed apps
+    'categories'
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,7 @@ CORS_ALLOW_CREDENTIALS = True
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
 }
+
+# DONDE SUBIR LAS IMAGENES
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'uploads')
