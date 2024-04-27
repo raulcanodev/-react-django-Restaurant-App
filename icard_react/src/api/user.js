@@ -33,7 +33,7 @@ export async function getMeApi(token) {
 			},
 		};
 		const response = await fetch(url, params);
-		const result = response.json();
+		const result = await response.json();
 		console.log(result);
 		return result;
 	} catch (e) {

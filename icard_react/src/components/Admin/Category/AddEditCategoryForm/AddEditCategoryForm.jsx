@@ -1,5 +1,5 @@
 import "./AddEditCategoryForm.scss";
-import { Form, Image, Button } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 
 export function AddEditCategoryForm() {
 	return (
