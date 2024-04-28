@@ -1,15 +1,26 @@
 import "./AddEditCategoryForm.scss";
 import { Form, Button, Image } from "semantic-ui-react";
 import { useDropzone } from "react-dropzone";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { useState, useCallback } from "react";
 
 export function AddEditCategoryForm() {
 	const [previewImage, setPreviewImage] = useState(null);
-	const onDrop = useCallback((acceptedFiles) => {
+
+	const formik = useFormik({
+		initialValues: initialValues(),
+		validationSchema: Yup.object(newSchema()),
+		validateOnChange: false,
+		onSubmit: (formValue) => {
+			console.log("Form value", formValue);
+		},
+	});
+
+	const onDrop = useCallback(async (acceptedFiles) => {
 		const file = acceptedFiles[0];
+		await formik.setFieldValue("image", file);
 		setPreviewImage(URL.createObjectURL(file));
-		console.log("file", file);
-		console.log("url", URL.createObjectURL(file));
 	}, []);
 
 	const { getRootProps, getInputProps } = useDropzone({
@@ -21,15 +32,45 @@ export function AddEditCategoryForm() {
 
 	return (
 		<>
-			<Form className="add-edit-category-form">
-				<Form.Input name="title" placeholder="Category name" />
-				<Button type="button" fluid {...getRootProps()}>
+			<Form
+				onSubmit={formik.handleSubmit}
+				className="add-edit-category-form">
+				<Form.Input
+					value={formik.values.title}
+					onChange={formik.handleChange}
+					error={formik.errors.title}
+					name="title"
+					placeholder="Category name"
+				/>
+				<Button
+					type="button"
+					fluid
+					{...getRootProps()}
+					color={formik.errors.image && "red"}>
 					Upload image
 				</Button>
+
 				<input {...getInputProps()} />
 				<Image src={previewImage} fluid />
+
 				<Button type="submit" content="Create" primary fluid></Button>
 			</Form>
 		</>
 	);
+}
+
+// This function is used to initialize the form values Formik
+function initialValues() {
+	return {
+		title: "",
+		image: "",
+	};
+}
+
+// This function is used to validate the form
+function newSchema() {
+	return {
+		title: Yup.string().required(true),
+		image: Yup.string().required(true),
+	};
 }
