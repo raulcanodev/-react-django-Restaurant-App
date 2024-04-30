@@ -2,7 +2,11 @@ import "./TableCategoryAdmin.scss";
 import { Table, Image, Button, Icon } from "semantic-ui-react";
 import { map } from "lodash";
 
-export function TableCategoryAdmin({ categories }) {
+export function TableCategoryAdmin({
+	categories,
+	updateCategory,
+	deleteCategory,
+}) {
 	return (
 		<>
 			<Table className="table-category-admin">
@@ -20,7 +24,10 @@ export function TableCategoryAdmin({ categories }) {
 								<Image src={category.image} />
 							</Table.Cell>
 							<Table.Cell>{category.title}</Table.Cell>
-							<Action category={category}></Action>
+							<Action
+								category={category}
+								updateCategory={updateCategory}
+								deleteCategory={deleteCategory}></Action>
 						</Table.Row>
 					))}
 				</Table.Body>
@@ -29,17 +36,19 @@ export function TableCategoryAdmin({ categories }) {
 	);
 }
 
-function Action({ category }) {
+function Action({ category, updateCategory, deleteCategory }) {
 	return (
 		<>
 			<Table.Cell textAlign="right">
-				<Button icon onClick={() => console.log("update category")}>
+				<Button icon onClick={() => updateCategory(category)}>
 					<Icon name="pencil"></Icon>
 				</Button>
 				<Button icon negative>
 					<Icon
 						name="close"
-						onClick={() => console.log("Delete category")}></Icon>
+						onClick={() => {
+							deleteCategory(category);
+						}}></Icon>
 				</Button>
 			</Table.Cell>
 		</>

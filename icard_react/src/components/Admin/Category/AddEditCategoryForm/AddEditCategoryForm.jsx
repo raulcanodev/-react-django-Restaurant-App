@@ -6,17 +6,18 @@ import * as Yup from "yup";
 import { useState, useCallback } from "react";
 import { useCategory } from "../../../../hooks";
 
-export function AddEditCategoryForm({ onClose, onRefetch }) {
-	const [previewImage, setPreviewImage] = useState(null);
-	const { addCategory } = useCategory();
+export function AddEditCategoryForm({ onClose, onRefetch, category }) {
+	const [previewImage, setPreviewImage] = useState(category?.image || "");
+	const { addCategory, updateCategory } = useCategory();
 
 	const formik = useFormik({
-		initialValues: initialValues(),
-		validationSchema: Yup.object(newSchema()),
+		initialValues: initialValues(category),
+		validationSchema: Yup.object(category ? updateSchema() : newSchema()),
 		validateOnChange: false,
 		onSubmit: async (formValue) => {
 			try {
-				await addCategory(formValue);
+				if (category) await updateCategory(category.id, formValue);
+				else await addCategory(formValue);
 				onRefetch();
 				onClose();
 			} catch (error) {
@@ -55,22 +56,26 @@ export function AddEditCategoryForm({ onClose, onRefetch }) {
 					fluid
 					{...getRootProps()}
 					color={formik.errors.image && "red"}>
-					Upload image
+					{previewImage ? "Update image" : "Select an image"}
 				</Button>
 
 				<input {...getInputProps()} />
 				<Image src={previewImage} fluid />
 
-				<Button type="submit" content="Create" primary fluid></Button>
+				<Button
+					type="submit"
+					content={category ? "Update" : "Create"}
+					primary
+					fluid></Button>
 			</Form>
 		</>
 	);
 }
 
 // This function is used to initialize the form values Formik
-function initialValues() {
+function initialValues(data) {
 	return {
-		title: "",
+		title: data?.title || "",
 		image: "",
 	};
 }
@@ -80,5 +85,13 @@ function newSchema() {
 	return {
 		title: Yup.string().required(true),
 		image: Yup.string().required(true),
+	};
+}
+
+// This function is used to validate the form
+function updateSchema() {
+	return {
+		title: Yup.string().required(true),
+		image: Yup.string(),
 	};
 }
