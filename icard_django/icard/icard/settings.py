@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'corsheaders', # Add corsheaders to the installed apps
     'drf_yasg', # API Doc
     'rest_framework', # Add rest_framework to the installed apps
-    'users', # Add users to the installed apps
-    'categories'
+    'django_filters', # Add django_filters to the installed apps
+    # Apps
+    'users',
+    'categories',
+    "products",
 ]
 
 MIDDLEWARE = [
