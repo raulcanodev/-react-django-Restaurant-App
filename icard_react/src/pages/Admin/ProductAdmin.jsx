@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { HeadePage, TableProductAdmin } from "../../components/Admin";
 import { useProduct } from "../../hooks";
 import { Loader } from "semantic-ui-react";
+import { get } from "lodash";
 
 export function ProductAdmin() {
 	const { loading, products, getProducts } = useProduct();
 
-	useEffect(() => getProducts(), []);
+	useEffect(() => {
+		getProducts();
+	}, []);
+
 	console.log(products);
 	return (
 		<>
